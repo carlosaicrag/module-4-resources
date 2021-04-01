@@ -1,0 +1,9 @@
+extends layout
+block content
+  form(action='/posts' method='post')
+    input(type='text' name='title' placeholder='title here' required)
+    input(type='text' name='body' placeholder='enter post content here' required)
+    select(name='subId')
+      each sub in subs
+        option(value=sub.id)= sub.name
+    button(type='submit') create post

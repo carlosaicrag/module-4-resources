@@ -1,0 +1,6 @@
+extends layout 
+block content
+  form(method='post' action='/users/login')
+    input(type='text' name='email' placeholder='email')
+    input(type='password' name='password' placeholder='password')
+    button(type='submit') login
