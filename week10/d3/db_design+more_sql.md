@@ -189,10 +189,26 @@ main();
 
 ```js
 
-npx sequelize model:generate --name User --attributes "username:string, email:string"
+npx sequelize model:generate --name User --attributes "username:string, email:string,age:integer"
 
 ```
-* You should now see a new file within the models folder
+* You should now see a new file within the models folder that looks like the code below 
+
+```js
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    username: DataTypes.STRING,
+    email: DataTypes.STRING,
+    age: DataTypes.INTEGER
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
+  return User;
+};
+```
+
 * You can type the command `npx sequelize-cli db:migrate` and it will create a new table in the breaddit database called `Users`.
 
 # Examine migration file that was created up/down
