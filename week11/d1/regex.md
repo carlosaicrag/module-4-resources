@@ -1,3 +1,4 @@
+* let students know that you will only be going over regex today and that they should watch the web server videos on their own time
 # regex
 
 optional: att? ⇒ a, t, zero or one t
