@@ -243,7 +243,7 @@ else
   a(href='/login') Please login
 ```
 # let's create a path that leads you to a specific product using the "id" of the product 
-* right now we are not going to be using an actual id but we'll simulate it 
+* right now we are not going to be using an actual id that is connected to something in our database but we'll simulate it 
 
 * add the following route 
 ```js
@@ -267,16 +267,23 @@ app.get("/product/:id(\\d+)", (req,res) => {
 
 })
 ```
-# let's create a route that is dynamic using regex 
-* let's say that we have a bunch of different paths for products that we want routed to the same path in our express application
 
-* /products
-* /our-products
-* /product
-* /productts
+# let's create a home page where we have all of our users displayed.  Let's also be able to create links for each user so that we go to their profile page
 
-* how would we do that? 
+* you should create a route that looks something like this:
+```js
+const express = require('express')
+const router = express.Router()
+const User = require("./models")
 
+router.get("/", loginReq, async (req,res) => {
+  users = await User.findAll()
+  res.render("layout", {users})
+})
+
+module.exports = router
+```
+* go ahead and setup the layout file to be able to render all of the users with links that take them to their profile page based on their id
 # let's modularize our routes so that we have a separate file for each route that starts with something different
 
 * create a routes folder 
