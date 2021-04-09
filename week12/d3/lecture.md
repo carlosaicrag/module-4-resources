@@ -1,6 +1,7 @@
 # Lecture Steps
 
 ## Part One
+
 Have the students watch the video and ask if there are any questions about it or if there are any questions from the homework they did the previous night.
 
 Then I usually have a Notion page set up with two tables and an image. It may look like this:
@@ -21,7 +22,7 @@ We watch the second video and then I answered questions related to that. Afterwa
 
 * Add a delete form to the pug file to show them the old way of doing this. Something similar to this:
 
-```
+```pug
 block content
   h1= title
   ul
@@ -39,7 +40,7 @@ block content
 
 * Switch the delete button in the pug file to no longer be a form, but rather just a plain button, and add a class to the ul so that it can be grabbed via the future javascript file. This is also a good time to mention data attributes as a way to store data within the element so that it can be grabbed easily later:
 
-```
+```pug
 block content
   h1= title
   ul(class="post-list")
@@ -60,7 +61,8 @@ block content
 * In your layout.pug, add `block head` to the head so that we can append lines to it in pug files that extend layout. Then append the index.js file to the head in your index.pug file:
 
 layout.pug:
-```
+
+```pug
 html(lang="en")
   head
     block head
@@ -71,7 +73,8 @@ html(lang="en")
 ```
 
 index.pug:
-```
+
+```pug
 append head
   script(src="javascripts/index.js" type='module') 
 ```
