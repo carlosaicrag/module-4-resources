@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+  h1 Welcome to the signup page
+
+  form(action="/users/signup", method="post") 
+    label Email 
+      input(type="text", name="email")
+    label Username 
+      input(type="text", name="username")
+    label Password 
+      input(type="text", name="password")
+
+    button(type="submit") Submit

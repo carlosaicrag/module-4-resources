@@ -1,0 +1,7 @@
+extends layout.pug
+block content
+  h1= title
+  ul
+    each sub in subbreaddits
+      li
+        a(href=`/subbreaddits/${sub.id}`)= sub.name
