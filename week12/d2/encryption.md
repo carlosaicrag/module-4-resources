@@ -27,3 +27,13 @@
 *// 3. any subsequent requests to the server will be encrypted with this public key*
 
 *// 4. server uses the private key to decrypt data*
+
+# Go through the crypto and bcrypt files
+* make sure to place these files in the breaddit project and go over them with students.  the files can be found in the crypto:auth folder 
+* make sure that you give a high level over view of what base 64 encoding is
+
+# Start breaddit auth
+* make sure that you add a hashedPw column to the users table
+* setup the session module that will allow you to create a cookie
+* talk about what the heck a cookie is.
+* finish auth for project

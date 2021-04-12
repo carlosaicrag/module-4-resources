@@ -16,7 +16,6 @@
 - Made up of a specific set of columns which specify the type of data, and rows which hold the actual data
 - ex: users
 
-bring up an example database in postbird to look at tables and different types of columns
 
 ## creating database entities
 
