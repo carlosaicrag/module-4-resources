@@ -1,23 +1,23 @@
 # Hello Database
 
-### RDMS
+# RDMS
 
 - program that allows you to create, update, and administer a relational database
 - can contain any number of databases
 - ex: PostgreSQL (what we will be using)
 
-### Database
+# Database
 
 - collection of interrelated tables with relevant data for a given application / service
 - ex: twitter_lite_dev
 
-### Table
+# Table
 
 - Made up of a specific set of columns which specify the type of data, and rows which hold the actual data
 - ex: users
 
 
-## creating database entities
+# creating database entities
 
 1. create a new user using psql
 2. create a new database
