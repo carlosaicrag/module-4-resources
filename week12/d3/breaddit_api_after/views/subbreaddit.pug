@@ -1,0 +1,10 @@
+extends layout.pug
+block content
+  h1= sub.name
+  ul
+    each post in sub.Posts
+      li= post.title
+block footer
+  footer
+    div this is our new footer
+    div this is not gonna break

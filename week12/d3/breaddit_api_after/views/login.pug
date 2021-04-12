@@ -1,0 +1,12 @@
+extends layout.pug
+
+block content
+  h1 Welcome to the login page
+
+  form(action="/users/login", method="post") 
+    label Username 
+      input(type="text", name="username")
+    label Password 
+      input(type="text", name="password")
+
+    button(type="submit") Submit

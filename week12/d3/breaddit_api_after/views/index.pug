@@ -1,0 +1,17 @@
+extends layout.pug
+
+append head
+  script(src="javascripts/index.js" type='module') 
+  link(rel="stylesheet", href="stylesheets/index.css")
+
+
+block content
+  h1= title
+  ul(class="post-list")
+    each post in posts
+      li
+        p= post.title
+        p= post.body
+        button(class="delete-button" data-user-id=post.id) Bake it Away
+        //- form(action=`/posts/${post.id}/delete` method='post')
+        //-   input(type="submit", value="Bake it Away")
