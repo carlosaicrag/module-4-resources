@@ -1,52 +1,4 @@
-# Deeper into Data
-
-- after the relational database design video, I usually pull up a schema design tool (quickdatabasediagrams.com) and have the students help me design a schema that we'll use for the breaddit project
-
-### stages of relational database design
-
-1. define the purpose/entities of the relational DB
-2. identify primary keys
-3. establish table relationships
-4. apply normalization rules
-
-### normalization
-
-Normalization is the process of optimizing the database structure so that redundancy and confusion are eliminated.
-
-### types of relationships
-
-- one-to-one
-- one-to-many
-- many-to-many
-
-### what is a transaction?
-
-- single unit of work performed on a database
-- can contain multiple operations
-- an "all-or-nothing" operation
-
-### transactional commands
-
-- begin - begin transaction
-- commit - commit / end transacation
-- rollback - rollback to previous savepoint
-- savepoint - creates savepoints
-- set transaction - set characteristics of transaction
-
-```sql
-BEGIN;
-INSERT INTO users(username, email)
-VALUES (
-```
-
-### why use transactions?
-
-- single "all-or-nothing" operations, no incomplete changes made to database
-- users only see final result
-- data is preserved through system crashes or failures
-- savepoints/rollbacks let us revert to an earlier version if errors are made
-
-## subqueries
+# subqueries
 
 - a select statement nested inside an outer select statement
 - can return a single value or multiple rows
@@ -55,19 +7,12 @@ VALUES (
 The good thing in sub-queries is that they are more readable than JOINs: that's why most new SQL people prefer them; it is the easy way; but when it comes to performance, JOINS are better in most cases
 
 ```sql
-select * from movies
-where score > (
-  select max(score)
-  from movies
-  where yr between 1980 and 1990)
-  order by score desc;
-
 select * from actors
 join castings on castings.actor_id = actors.id
 where castings.movie_id IN (
   select id
   from movies
-  where title = 'Casablanca')
+  where title = 'Casablanca');
   
   
 select actors.* from actors
@@ -75,18 +20,52 @@ join castings on castings.actor_id = actors.id
 join movies on movies.id = castings.movie_id
 where movies.title = 'Casablanca';
 ```
+# Deeper into Data
 
-### EXPLAIN
+- after the relational database design video, I usually pull up a schema design tool (quickdatabasediagrams.com) and have the students help me design a schema that we'll use for the breaddit project
 
-- demonstrate the increased lookup efficiency after adding an index to one of the columns
+# stages of relational database design
 
-```sql
-explain analyze select * from actors where name = 'Nicolas Cage';
+1. define the purpose/entities of the relational DB
+2. identify primary keys
+3. establish table relationships
+4. apply normalization rules
 
-create index actor_name on actors (name);
-drop index actor_name
-```
+# normalization
 
+Normalization is the process of optimizing the database structure so that redundancy and confusion are eliminated.
+
+# types of relationships
+
+- one-to-one
+- one-to-many
+- many-to-many
+
+# let's design our backend
+
+## users
+| Column Name | Data Type |
+|-------------|-----------|
+| id          | integer   |
+| username    | string    |
+| email       | string    |
+| avatar_url  | string    |
+## posts 
+| Column Name | Data Type |
+|-------------|-----------|
+| id          | integer   |
+| userId      | integer   |
+| subId       | integer   |
+| title       | string    |
+| body        | string    |
+| image_url   | string    |
+
+## subreaddit 
+| Column Name | Data Type |
+|-------------|-----------|
+| id          | integer   |
+| name        | string    |
+| sidebar     | text      |
 # starting the breaddit app
 
 * npm install sequelize@^5.0.0
@@ -128,7 +107,7 @@ drop index actor_name
   * If you dont type something after psql then it will try to go into a database with the same name as your user. if there isn't a database is postgres that has the same name as your user then you will receive an error.
 2. type in the command below and remember to use  single quotes!
 
-```psql
+```sql
 
 CREATE USER breaddit_user
 WITH
@@ -140,6 +119,9 @@ SUPERUSER;
 * by default on mac your user might be set to be a super user already
 ---
 
+# sequelize-cli 
+* what thee heck is it?
+* draw picture showing what sequlize-cli is
 # Let's create a database that our breaddit app will use using sequelize-cli
 npx sequelize-cli db:create
 * This should create a database named with what you put in the config file
@@ -208,7 +190,8 @@ module.exports = (sequelize, DataTypes) => {
   return User;
 };
 ```
-
+# migrations
+* a log of the way you're database has changed over time.  
 * You can type the command `npx sequelize-cli db:migrate` and it will create a new table in the breaddit database called `Users`.
 
 # Examine migration file that was created up/down
@@ -224,13 +207,17 @@ module.exports = (sequelize, DataTypes) => {
 * after running the above command you should see that a new file was created within the seeder folder.  You can now insert data into your Users table
 ```js
 // code...
-return queryInterface.bulkInsert("User",[{
+return queryInterface.bulkInsert("Users",[{
         email:"banana@gmail.com",
         username:"bananasAreGreat"
       }])
 // code...
 ```
-# Let's fetch some data using the cat model
+* you also have to make sure that you write corresponding down function 
+```js
+return queryInterfaceBulkDelete("Users", null, {})
+```
+# Let's fetch some data using the user model
 in index.js update the code to fetch a user
 
 ```js
