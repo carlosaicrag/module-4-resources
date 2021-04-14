@@ -88,7 +88,8 @@ Normalization is the process of optimizing the database structure so that redund
   * will make the folder structure that you see below 
   * the npx tool allows you to easily run scripts provided by packages like sequelize-cli
   * install it with npm install npx --global
-  
+
+``` 
 ├── config
 │   └── config.json
 ├── migrations
@@ -98,7 +99,7 @@ Normalization is the process of optimizing the database structure so that redund
 ├── package-lock.json
 ├── package.json
 └── seeders
-
+```
 ---
 
 # Review postgres commands 
