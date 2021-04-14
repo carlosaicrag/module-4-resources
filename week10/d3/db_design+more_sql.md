@@ -6,6 +6,12 @@
 > In JOINs RDBMS can create an execution plan that is better for your query and can predict what data should be loaded to be processed and save time, unlike the sub-query where it will run all the queries and load all their data to do the processing.
 The good thing in sub-queries is that they are more readable than JOINs: that's why most new SQL people prefer them; it is the easy way; but when it comes to performance, JOINS are better in most cases
 
+* use subqueries
+  * returning a single value 
+  * checking when a value is in a list of values
+* use joins
+  * getting data from multiple tables on a match condition
+
 ```sql
 select * from actors
 join castings on castings.actor_id = actors.id
@@ -19,6 +25,8 @@ select actors.* from actors
 join castings on castings.actor_id = actors.id
 join movies on movies.id = castings.movie_id
 where movies.title = 'Casablanca';
+
+
 ```
 # Deeper into Data
 
@@ -41,6 +49,7 @@ Normalization is the process of optimizing the database structure so that redund
 - one-to-many
 - many-to-many
 
+* set expectations that we will not be talking about associations today but if they got far enough in the project they will see it. 
 # let's design our backend
 
 ## users
@@ -120,7 +129,7 @@ SUPERUSER;
 ---
 
 # sequelize-cli 
-* what thee heck is it?
+* what the heck is it?
 * draw picture showing what sequlize-cli is
 # Let's create a database that our breaddit app will use using sequelize-cli
 npx sequelize-cli db:create
