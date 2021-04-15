@@ -69,7 +69,7 @@ Normalization is the process of optimizing the database structure so that redund
 | body        | string    |
 | image_url   | string    |
 
-## subreaddit 
+## subbreaddit 
 | Column Name | Data Type |
 |-------------|-----------|
 | id          | integer   |
@@ -192,7 +192,7 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     username: DataTypes.STRING,
     email: DataTypes.STRING,
-    age: DataTypes.INTEGER
+    avatar_url: DataTypes.INTEGER
   }, {});
   User.associate = function(models) {
     // associations can be defined here
@@ -249,7 +249,7 @@ async function main() {
   console.log(user.toJSON());
 
   // you can also access the attributes of a user using dot notation
-  const cat = await User.findByPk(1);
+  const user = await User.findByPk(1);
   console.log(`${user.firstName} has been assigned id #${user.id}.`);
   console.log(`They are ${user.age} years old.`)
   console.log(`Their special skill is ${user.specialSkill}.`);
@@ -259,7 +259,7 @@ async function main() {
   user.specialSkill = "jumping";
   user.age = 123;
 
-  user.save()
+  await user.save()
   await sequelize.close();
 }
 

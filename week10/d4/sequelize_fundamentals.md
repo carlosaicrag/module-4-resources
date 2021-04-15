@@ -1,8 +1,14 @@
 # Crud Operations with sequelize
+
+- before the start of this lecture, make sure that you create seeds for the post and subb termianreaddit tables
+
+- make sure that you unmigrate, remigrate, unseed, reseed
 ---
 
-# Creating a new record 
-* in index.js file
+# Creating a new record
+
+- in main.js file
+
 ```js
 const { sequelize, User } = require("./models");
 
@@ -11,8 +17,8 @@ async function main() {
   // save anything to the database yet**. Attributes are passed in as a
   // POJO.
   const user = User.build({
-    firstName: "Markov",
-    specialSkill: "sleeping",
+    username: "carlosaicrah",
+    email: "carlos@banana.com",
     age: 5,
   });
 
@@ -31,6 +37,7 @@ main();
 ---
 
 # Reading A Record By Primary Key
+
 ```js
 const { sequelize, User } = require("./models");
 
@@ -44,12 +51,13 @@ async function main() {
 
 main();
 ```
+
 ---
 
 # Updating A Record
 
 ```js
-const { sequelize, User }  = require("./models");
+const { sequelize, User } = require("./models");
 
 async function main() {
   const user = await User.findByPk(1);
@@ -58,11 +66,10 @@ async function main() {
 
   // The Cat object is modified, but the corresponding record in the
   // database is *not* yet changed at all.
-  user.specialSkill = "super deep sleeping";
+  user.username = "banana";
   // Only by calling `save` will the data be saved.
   await user.save();
 
-  console.log("New Markov: ");
   console.log(user.toJSON());
 
   await sequelize.close();
@@ -78,33 +85,12 @@ main();
 ```js
 const process = require("process");
 
-const { sequelize , User } = require("./models");
+const { sequelize, User } = require("./models");
 
 async function main() {
   const user = await User.findByPk(1);
   // Remove the user record.
   await user.destroy();
-
-  await sequelize.close();
-}
-
-main();
-```
----
-# Class Methods For CRUD
-
-* When creating a record, you can avoid the two step process of (1) creating a Cat instance and (2) calling the save instance method. You can do a one step process of calling the create class
-
-```js
-const { sequelize, User } = require("./models");
-
-async function main() {
-  const user = await User.create({
-    username: "carlosaicrag",
-    email: "carlos@gmail.com"
-  });
-
-  console.log(user.toJSON());
 
   await sequelize.close();
 }
@@ -127,7 +113,31 @@ main();
 
 ---
 
+# Class Methods For CRUD
+
+- When creating a record, you can avoid the two step process of (1) creating a Cat instance and (2) calling the save instance method. You can do a one step process of calling the create class
+
+```js
+const { sequelize, User } = require("./models");
+
+async function main() {
+  const user = await User.create({
+    username: "carlosaicrag",
+    email: "carlos@gmail.com",
+    age: 10
+  });
+
+  console.log(user.toJSON());
+
+  await sequelize.close();
+}
+
+main();
+```
+
+---
 # findAll()
+
 ```js
 const { sequelize, User } = require("./models");
 
@@ -145,7 +155,9 @@ async function main() {
 
 main();
 ```
+
 # findAll({where: {}})
+
 ```js
 const { sequelize, User } = require("./models");
 
@@ -153,7 +165,7 @@ async function main() {
   // Fetch all cats named Markov.
   const users = await User.findAll({
     where: {
-      username: "Markov",
+      username: "carlos",
     },
   });
   console.log(JSON.stringify(users, null, 2));
@@ -163,8 +175,11 @@ async function main() {
 
 main();
 ```
+
 ---
+
 # findAll({where: {}}) OR
+
 ```js
 const { sequelize, User } = require("./models");
 
@@ -172,7 +187,7 @@ async function main() {
   // Fetch all cats named Markov or Curie.
   const users = await User.findAll({
     where: {
-      userName: ["Markov","Curie"], // if I wanted to get all users who have usernames Markov OR Curie
+      username: ["carlos", "alec"], // if I wanted to get all users who have usernames Markov OR Curie
     },
   });
   console.log(JSON.stringify(users, null, 2));
@@ -182,11 +197,14 @@ async function main() {
 
 main();
 ```
+
 ---
 
 # Using findAll To Find Objects Not Matching A Criterion
+
 [sequelize operators](https://sequelize.org/v5/manual/querying.html#operators)
-* sequelize operators are used to make more complex operations
+
+- sequelize operators are used to make more complex operations
 
 ```js
 const { sequelize, User } = require("./models");
@@ -196,9 +214,9 @@ async function main() {
   const users = await User.findAll({
     where: {
       firstname: {
-      // Op.ne means the "not equal" operator.
-        [Op.ne]: "Markov" 
-      }
+        // Op.ne means the "not equal" operator.
+        [Op.ne]: "banana",
+      },
     },
   });
   console.log(JSON.stringify(users, null, 2));
@@ -209,19 +227,20 @@ async function main() {
 main();
 ```
 
-
 ---
+
 # Combining Criteria with Op.and
+
 ```js
 const { Op } = require("sequelize");
-const { sequelize , User } = require("./models");
+const { sequelize, User } = require("./models");
 
 async function main() {
   const users = await db.User.findAll({
     where: {
       // here we are grouping an array of queries to say that all these criteria must be satified in order for us to grab a certain user from our database
       [Op.and]: [
-        { firstName: { [Op.ne]: "Markov" } },
+        { firstName: { [Op.ne]: "banana" } },
         { email: "carlos@gmail.com" },
       ],
     },
@@ -235,7 +254,9 @@ main();
 ```
 
 ---
+
 # Combining Criteria with Op.or
+
 ```js
 const { Op } = require("sequelize");
 const { sequelize, User } = require("./models");
@@ -244,10 +265,7 @@ async function main() {
   // fetch users with username == Markov OR age = 4.
   const users = await User.findAll({
     where: {
-      [Op.or]: [
-        { userName: "Markov" },
-        { age: 4 },
-      ],
+      [Op.or]: [{ userName: "Markov" }, { age: 10000 }],
     },
   });
   console.log(JSON.stringify(users, null, 2));
@@ -258,8 +276,8 @@ async function main() {
 main();
 ```
 
-
 ---
+
 # Querying With Comparisons
 
 ```js
@@ -301,6 +319,7 @@ main();
 # Limiting Results and findOne
 
 ## limiting results
+
 ```js
 const { sequelize, User } = require("./models");
 
@@ -318,12 +337,16 @@ main();
 ```
 
 ## findOne
+
 ```js
+const { Op } = require("sequelize");
 const { sequelize, User } = require("./models");
 
 async function main() {
   const user = await User.findOne({
-    order: [["age", "DESC"]],
+    where: {
+      age: { [Op.gt]: 4 },
+    },
   });
   console.log(JSON.stringify(user, null, 2));
 
@@ -332,71 +355,82 @@ async function main() {
 
 main();
 ```
+
 ---
 
 # Validations
 
 ---
+
 # Validating That An Attribute Is Not NULL
-* we don't want to save a user that doesnt have a username or an email
-* we're going to change our model for user a little
-* right now it should like the code below
+
+- we don't want to save a user that doesnt have a username or an email
+- we're going to change our model for user a little
+- right now it should like the code below
 
 ```js
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    age: DataTypes.Integer
-  }, {});
-  User.associate = function(models) {
+  const User = sequelize.define(
+    "User",
+    {
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      age: DataTypes.Integer,
+    },
+    {}
+  );
+  User.associate = function (models) {
     // associations can be defined here
   };
   return User;
 };
 ```
 
-* we're going to change it up so that we can add some validations to the user model
+- we're going to change it up so that we can add some validations to the user model
 
 ```js
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: {
-      //makes sure that the type of anything in this column is a string
-      type: DataTypes.STRING,
-      //makes sure that there are never any null values
-      allowNull: false,
-      validate: {
-        //if the validation is ever not fulfilled than i will display a custom message
-        notNull: {
-          msg: "firstName must not be null",
+  const User = sequelize.define(
+    "User",
+    {
+      username: {
+        //makes sure that the type of anything in this column is a string
+        type: DataTypes.STRING,
+        //makes sure that there are never any null values
+        allowNull: false,
+        validate: {
+          //if the validation is ever not fulfilled than i will display a custom message
+          notNull: {
+            msg: "firstName must not be null",
+          },
         },
       },
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "firstName must not be null",
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "firstName must not be null",
+          },
         },
       },
+      age: {
+        type: DataTypes.Integer,
+        allowNull: false,
+      },
     },
-    age: {
-      type: DataTypes.Integer,
-      allowNull: false,
-    }
-  }, {});
-  User.associate = function(models) {
+    {}
+  );
+  User.associate = function (models) {
     // associations can be defined here
   };
   return User;
 };
 ```
 
-* let's try it out 
+- let's try it out
 
 ```js
 const { sequelize, User } = require("./models");
@@ -424,10 +458,10 @@ async function main() {
   await sequelize.close();
 }
 
-main()
+main();
 ```
 
-* let's fix it 
+- let's fix it
 
 ```js
 // index.js
@@ -446,8 +480,7 @@ async function main() {
   }
 
   // Fix the various validation problems.
-  user.firstName = "Markov";
-  user.specialSkill = "sleeping";
+  user.username = "Markov";
   user.age = 4;
 
   try {
@@ -463,258 +496,357 @@ async function main() {
   await sequelize.close();
 }
 
-main()
+main();
 ```
+
 ---
 
 # The notEmpty Validation
-* right now we can't save null as an attribute but we can save an empty string
-* let's fix that by adding to our model 
+
+- right now we can't save null as an attribute but we can save an empty string
+- let's fix that by adding to our model
 
 ```js
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: {
-      //makes sure that the type of anything in this column is a string
-      type: DataTypes.STRING,
-      //makes sure that there are never any null values
-      allowNull: false,
-      validate: {
-        //if the validation is ever not fulfilled than i will display a custom message
-        notNull: {
-          msg: "firstName must not be null",
+  const User = sequelize.define(
+    "User",
+    {
+      username: {
+        //makes sure that the type of anything in this column is a string
+        type: DataTypes.STRING,
+        //makes sure that there are never any null values
+        allowNull: false,
+        validate: {
+          //if the validation is ever not fulfilled than i will display a custom message
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "username cannot be empty",
+          },
         },
-        notEmpty: {
-          msg: "username cannot be empty"
-        }
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "email cannot be empty",
+          },
+        },
+      },
+      age: {
+        type: DataTypes.Integer,
+        allowNull: false,
       },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "firstName must not be null",
-        },
-        notEmpty: {
-          msg: "email cannot be empty"
-        }
-      },
-    },
-    age: {
-      type: DataTypes.Integer,
-      allowNull: false,
-    }
-  }, {});
-  User.associate = function(models) {
+    {}
+  );
+  User.associate = function (models) {
     // associations can be defined here
   };
   return User;
 };
 ```
 
-* go ahead and test it like we did in the previous example 
+- go ahead and test it like we did in the previous example
 
 ---
 
 # Forbidding Long String Values
 
 ```js
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: {
-      //makes sure that the type of anything in this column is a string
-      type: DataTypes.STRING,
-      //makes sure that there are never any null values
-      allowNull: false,
-      validate: {
-        //if the validation is ever not fulfilled than i will display a custom message
-        notNull: {
-          msg: "firstName must not be null",
+  const User = sequelize.define(
+    "User",
+    {
+      username: {
+        //makes sure that the type of anything in this column is a string
+        type: DataTypes.STRING,
+        //makes sure that there are never any null values
+        allowNull: false,
+        validate: {
+          //if the validation is ever not fulfilled than i will display a custom message
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "username cannot be empty",
+          },
+          len: {
+            args: [0, 8],
+            msg: "firstName must not be more than eight letters long",
+          },
         },
-        notEmpty: {
-          msg: "username cannot be empty"
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "email cannot be empty",
+          },
+          len: {
+            args: [0, 25],
+            msg: "firstName must not be more than eight letters long",
+          },
         },
-        len: {
-          args: [0, 8],
-          msg: "firstName must not be more than eight letters long",
-        }
+      },
+      age: {
+        type: DataTypes.Integer,
+        allowNull: false,
       },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "firstName must not be null",
-        },
-        notEmpty: {
-          msg: "email cannot be empty"
-        },
-        len: {
-          args: [0, 25],
-          msg: "firstName must not be more than eight letters long",
-        }
-      },
-    },
-    age: {
-      type: DataTypes.Integer,
-      allowNull: false,
-    }
-  }, {});
-  User.associate = function(models) {
+    {}
+  );
+  User.associate = function (models) {
     // associations can be defined here
   };
   return User;
 };
 ```
-* go ahead and test like before
+
+- go ahead and test like before
 
 ---
+
 # Validating That A Numeric Value Is Within A Specified Range
 
 ```js
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: {
-      //makes sure that the type of anything in this column is a string
-      type: DataTypes.STRING,
-      //makes sure that there are never any null values
-      allowNull: false,
-      validate: {
-        //if the validation is ever not fulfilled than i will display a custom message
-        notNull: {
-          msg: "firstName must not be null",
+  const User = sequelize.define(
+    "User",
+    {
+      username: {
+        //makes sure that the type of anything in this column is a string
+        type: DataTypes.STRING,
+        //makes sure that there are never any null values
+        allowNull: false,
+        validate: {
+          //if the validation is ever not fulfilled than i will display a custom message
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "username cannot be empty",
+          },
+          len: {
+            args: [0, 8],
+            msg: "firstName must not be more than eight letters long",
+          },
         },
-        notEmpty: {
-          msg: "username cannot be empty"
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "email cannot be empty",
+          },
+          len: {
+            args: [0, 25],
+            msg: "firstName must not be more than eight letters long",
+          },
         },
-        len: {
-          args: [0, 8],
-          msg: "firstName must not be more than eight letters long",
-        }
+      },
+      age: {
+        type: DataTypes.Integer,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "age must not be null",
+          },
+          min: {
+            args: [0],
+            msg: "age must not be less than zero",
+          },
+          max: {
+            args: [99],
+            msg: "age must not be greater than 99",
+          },
+        },
       },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "firstName must not be null",
-        },
-        notEmpty: {
-          msg: "email cannot be empty"
-        },
-        len: {
-          args: [0, 25],
-          msg: "firstName must not be more than eight letters long",
-        }
-      },
-    },
-    age: {
-      type: DataTypes.Integer,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "age must not be null",
-        },
-        min: {
-          args: [0],
-          msg: "age must not be less than zero",
-        },
-        max: {
-          args: [99],
-          msg: "age must not be greater than 99",
-        },
-      },
-    }
-  }, {});
-  User.associate = function(models) {
+    {}
+  );
+  User.associate = function (models) {
     // associations can be defined here
   };
   return User;
 };
 ```
-* test like before 
+
+- test like before
+
 ---
+
 # Validating That An Attribute Is Among A Finite Set Of Values
-* we've added a validation to the username column
+
+- we've added a validation to the username column
+
 ```js
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: {
-      //makes sure that the type of anything in this column is a string
-      type: DataTypes.STRING,
-      //makes sure that there are never any null values
-      allowNull: false,
-      validate: {
-        //if the validation is ever not fulfilled than I will display a custom message
-        notNull: {
-          msg: "firstName must not be null",
+  const User = sequelize.define(
+    "User",
+    {
+      username: {
+        //makes sure that the type of anything in this column is a string
+        type: DataTypes.STRING,
+        //makes sure that there are never any null values
+        allowNull: false,
+        validate: {
+          //if the validation is ever not fulfilled than I will display a custom message
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "username cannot be empty",
+          },
+          len: {
+            args: [0, 8],
+            msg: "firstName must not be more than eight letters long",
+          },
+          isIn: {
+            args: [["carlosaicrag", "banana", "papaya"]],
+            msg: "username must be either carlosaicrag, banana or papaya",
+          },
         },
-        notEmpty: {
-          msg: "username cannot be empty"
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "firstName must not be null",
+          },
+          notEmpty: {
+            msg: "email cannot be empty",
+          },
+          len: {
+            args: [0, 25],
+            msg: "firstName must not be more than eight letters long",
+          },
         },
-        len: {
-          args: [0, 8],
-          msg: "firstName must not be more than eight letters long",
+      },
+      age: {
+        type: DataTypes.Integer,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "age must not be null",
+          },
+          min: {
+            args: [0],
+            msg: "age must not be less than zero",
+          },
+          max: {
+            args: [99],
+            msg: "age must not be greater than 99",
+          },
         },
-        isIn: {
-          args: [["carlosaicrag","banana","papaya"]],
-          msg: "username must be either carlosaicrag, banana or papaya"
-        }
       },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "firstName must not be null",
-        },
-        notEmpty: {
-          msg: "email cannot be empty"
-        },
-        len: {
-          args: [0, 25],
-          msg: "firstName must not be more than eight letters long",
-        }
-      },
-    },
-    age: {
-      type: DataTypes.Integer,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "age must not be null",
-        },
-        min: {
-          args: [0],
-          msg: "age must not be less than zero",
-        },
-        max: {
-          args: [99],
-          msg: "age must not be greater than 99",
-        },
-      },
-    }
-  }, {});
-  User.associate = function(models) {
+    {}
+  );
+  User.associate = function (models) {
     // associations can be defined here
   };
   return User;
 };
 ```
 
+# Associations
 
+- post model
 
+```js
+"use strict";
+module.exports = (sequelize, DataTypes) => {
+  const Post = sequelize.define(
+    "Post",
+    {
+      userId: DataTypes.INTEGER,
+      subId: DataTypes.INTEGER,
+      title: DataTypes.STRING,
+      body: DataTypes.STRING,
+      imageUrl: DataTypes.STRING,
+    },
+    {}
+  );
+  Post.associate = function (models) {
+    // associations can be defined here
+    Post.belongsTo(models.User, { foreignKey: "userId" });
+    Post.belongsTo(models.Subbreaddit, { foreignKey: "subId" });
+  };
+  return Post;
+};
+```
 
+- user model
 
+```js
+"use strict";
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    "User",
+    {
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      age: DataTypes.INTEGER,
+    },
+    {}
+  );
+  User.associate = function (models) {
+    // associations can be defined here
 
+    User.hasMany(models.Post, { foreignKey: "userId" });
 
+    const columnMapping = {
+      through: "Post",
+      otherKey: "subId",
+      foreignKey: "userId",
+    };
 
+    User.belongsToMany(models.Subbreaddit, columnMapping);
+  };
+  return User;
+};
+```
 
+- associations file
+
+```js
+const { Post, Subbreaddit, User, sequelize } = require("./models");
+
+async function queryPetsTypesAndOwners() {
+  const post = await Post.findByPk(1, { include: [User, Subbreaddit] });
+  console.log(
+    post.userId,
+    post.subId,
+    post.title,
+    post.body,
+    post.imageUrl,
+    post.User,
+    post.Subbreaddit
+  );
+
+  const user = await User.findByPk(1, { include: [Post] });
+
+  console.log(user.Posts);
+}
+
+queryPetsTypesAndOwners();
+```
