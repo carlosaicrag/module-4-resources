@@ -34,6 +34,26 @@ async function main() {
 main();
 ```
 
+- When creating a record, you can avoid the two step process of (1) creating a Cat instance and (2) calling the save instance method. You can do a one step process of calling the create class
+
+```js
+const { sequelize, User } = require("./models");
+
+async function main() {
+  const user = await User.create({
+    username: "carlosaicrag",
+    email: "carlos@gmail.com",
+    age: 10
+  });
+
+  console.log(user.toJSON());
+
+  await sequelize.close();
+}
+
+main();
+```
+
 ---
 
 # Reading A Record By Primary Key
@@ -104,30 +124,6 @@ const { sequelize, User } = require("./models");
 async function main() {
   // Destroy the User record with id #3.
   await User.destroy({ where: { id: 3 } });
-
-  await sequelize.close();
-}
-
-main();
-```
-
----
-
-# Class Methods For CRUD
-
-- When creating a record, you can avoid the two step process of (1) creating a Cat instance and (2) calling the save instance method. You can do a one step process of calling the create class
-
-```js
-const { sequelize, User } = require("./models");
-
-async function main() {
-  const user = await User.create({
-    username: "carlosaicrag",
-    email: "carlos@gmail.com",
-    age: 10
-  });
-
-  console.log(user.toJSON());
 
   await sequelize.close();
 }
