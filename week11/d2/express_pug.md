@@ -4,9 +4,11 @@
 ---
 # URL Anatomy
   foo://example.com:8042/over/there?name=ferret#nose
+  ```md
   \_/   \______________/\_________/ \_________/ \__/
    |           |            |            |        |
 scheme     authority       path        query   fragment
+```
 
 - The scheme (required),
 - The authority (required),
