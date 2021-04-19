@@ -18,8 +18,8 @@ scheme     authority       path        query   fragment
 
 ---
 
-# Setting express up 
-1. npm init -y 
+# Setting express up  
+1. npm init -y (we've already done this so we're just reviewing)
   * we are initilaizing npm and should get something that looks like this: 
   ```js
     {
@@ -59,14 +59,6 @@ const app = express();
 - post() - to handle POST requests
 - put() - to handle PUT requests
 - delete() - to handle DELETE requests
-
-# defining our first route 
-```js
-app.get('/', (req, res) => {
-  res.send('Hello from Express!');
-});
-```
-
 # Listening for HTTP connections 
 
 ```js
@@ -74,7 +66,13 @@ const port = 8081;
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 ```
-
+# defining our first route 
+```js
+app.get('/', (req, res) => {
+  //send allows us to send the http response
+  res.send('Hello from Express!');
+});
+```
 # let's test it out! 
 `node app.js`
 
@@ -97,7 +95,7 @@ app.get('/', (req, res) => {
   `);
 });
 ```
-* there is an error here, go ahead and fix the error and tell them that it can get pretty tedious if we were to send html like this
+* The page will render but there is an error here, go ahead and fix the error and tell them that it can get pretty tedious if we were to send html like this
 
 * luckily there is PUG!
 
@@ -114,12 +112,8 @@ html
 
 # setting up our application to be able to render pug templates 
 1. npm install pug@^2.0.0 #install pug package
-2. app.set('view engine', 'pug'); # put this in your app.js file (sets up the view engine to be pug)
+2. `app.set('view engine', 'pug');` # put this in your app.js file (sets up the view engine to be pug)
 
-Setting the view engine application setting property isn't required, but it has the following benefits:
-
-- It makes it clearer to code reviewers that your application is using the Pug template engine
-- You don't have to supply the file extension of the template when rendering a template (we'll see how this works next).
 
 # let's render our first template!
 1. let's create a views folder where we will create a new file called layout.pug
@@ -176,12 +170,12 @@ ul
 
 ```html
 <ul>
-  <li>Grace</li>
-  <li>Hopper</li>
+  <li>Carlos</li>
+  <li>Garcia</li>
 </ul>
 ```
 
-* variables can be used to set element attribute values 
+* Variables can be used to set element attribute values 
 
 ```pug
 form
@@ -278,7 +272,7 @@ const express = require('express')
 const router = express.Router()
 const User = require("./models")
 
-router.get("/", loginReq, async (req,res) => {
+router.get("/users", async (req,res) => {
   users = await User.findAll()
   res.render("layout", {users})
 })
@@ -325,7 +319,7 @@ const port = 8081;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 ```
 
-* now go ahead and take them through creating a quick pug template that renders all of the users (send data to the template where there is a key called users that points to an array of users you insert)
+* Now go ahead and take them through creating a quick pug template that renders all of the users (send data to the template where there is a key called users that points to an array of users you insert)
 
 
 
