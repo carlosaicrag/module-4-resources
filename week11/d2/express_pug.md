@@ -270,7 +270,7 @@ app.get("/product/:id(\\d+)", (req,res) => {
 ```js
 const express = require('express')
 const router = express.Router()
-const User = require("./models")
+const {User} = require("./models")
 
 router.get("/users", async (req,res) => {
   users = await User.findAll()
@@ -292,7 +292,8 @@ module.exports = router
 const express = require('express')
 const router = express.Router()
 
-router.get("/", loginReq,(req,res) => {
+router.get("/", (req,res) => {
+  //feel free to create another view that will render all of the users in your database currently
   res.send("these are all of the users")
 })
 
