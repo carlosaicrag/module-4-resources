@@ -34,6 +34,6 @@
 
 # Start breaddit auth
 * make sure that you add a hashedPw column to the users table
-* setup the session module that will allow you to create a cookie
 * talk about what the heck a cookie is.
+* setup the session module that will allow you to create a cookie
 * finish auth for project
